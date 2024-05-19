@@ -15,23 +15,31 @@ struct Foo
 	}
 };
 
-int main()
+void ShowBasicUsage()
 {
-	Delegate<int> signal{};
+	// Create a delegate accepting 1 integer as parameter
+	Delegate<int> Delegate{};
 
 	// 1. Add a free function
-	signal.Bind(&PrintNumber);
+	Delegate.Bind(&PrintNumber);
 
 	// 2. Add a lambda
-	signal.Bind([](const int a)->void { std::cout << "Lambda: " << a << "\n"; }); // Add a lambda
+	Delegate.Bind([](const int a)->void { std::cout << "Lambda: " << a << "\n"; }); // Add a lambda
 
 	// 3. Add a member function
 	Foo foo;
-	signal.Bind(&foo, &Foo::PrintNumber);
+	Delegate.Bind(&foo, &Foo::PrintNumber);
 
-	signal.Invoke(3);
+	Delegate.Invoke(3); // r-values are possible
 
-	std::cout << "\n\n==============================\n\n";
+	const int& Value{ 3 };
+	Delegate.Invoke(Value); // const l-value references as well
+}
+
+int main()
+{
+	ShowBasicUsage();
+	std::cout << "\n==============================\n";
 
 
 }

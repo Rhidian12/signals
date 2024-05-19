@@ -29,7 +29,7 @@ public:
 	template<typename T>
 	void Bind(T* const Target, void(T::* Function)(Ts...))
 	{
-		Callbacks.emplace_back(Target, [Target, Function](Ts... args) { std::invoke(Function, *Target, std::forward<Ts>(args)...);  });
+		Callbacks.emplace_back(Target, [Target, Function](Ts... args) { (Target->*Function)(std::forward<Ts>(args)...);  });
 	}
 
 	void Invoke(Ts... args)
