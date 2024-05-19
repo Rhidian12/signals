@@ -13,6 +13,11 @@ struct Foo
 	{
 		std::cout << "Member function: " << a << "\n";
 	}
+
+	void PrintNumberConst(const int a) const
+	{
+		std::cout << "Const Member function: " << a << "\n";
+	}
 };
 
 void ShowBasicUsage()
@@ -29,6 +34,7 @@ void ShowBasicUsage()
 	// 3. Add a member function
 	Foo foo;
 	Delegate.Bind(&foo, &Foo::PrintNumber);
+	Delegate.Bind(&foo, &Foo::PrintNumberConst);
 
 	Delegate.Invoke(3); // r-values are possible
 

@@ -31,7 +31,12 @@ public:
 	{
 		Callbacks.emplace_back(Target, [Target, Function](Ts... args) { (Target->*Function)(std::forward<Ts>(args)...);  });
 	}
-
+	template<typename T>
+	void Bind(const T* const Target, void(T::* Function)(Ts...) const)
+	{
+		Callbacks.emplace_back(Target, [Target, Function](Ts... args) { (Target->*Function)(std::forward<Ts>(args)...); });
+	}
+	
 	void Invoke(Ts... args)
 	{
 		for (const CallbackInfo& callback : Callbacks)
