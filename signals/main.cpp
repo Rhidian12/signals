@@ -36,7 +36,13 @@ void ShowBasicUsage()
 	Delegate.Bind(&foo, &Foo::PrintNumber);
 	Delegate.Bind(&foo, &Foo::PrintNumberConst);
 
-	Delegate.Invoke(3); // r-values are possible
+	// You can invoke with any type, as long as it is convertible to the original template parameter given to 'Delegate'
+	// in this case, a normal 'int' was passed, so (const) r-value integers and (const) l-value integers can all bind to it
+	// if an 'int&' had been used instead, only l- and r-value references would be allowed
+	// Note that this does mean that parameters will eventually be copied when the call is invoked (if the template parameter is not
+	// a reference)
+
+	Delegate.Invoke(3); // r-value references are possible
 
 	const int& Value{ 3 };
 	Delegate.Invoke(Value); // const l-value references as well
