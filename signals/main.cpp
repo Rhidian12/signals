@@ -68,9 +68,14 @@ void ShowUnassignUsage()
 
 	// 2. Assign a lambda
 	// Since we're not storing the lambda, we cannot unassign it later
-	Delegate.Bind([](const int a, const float b) { std::cout << "Lambda: " << a << ", " << b << "\n"; });
+	Delegate.Bind([](const int a, const float b) { std::cout << "Unstored Lambda: " << a << ", " << b << "\n"; });
 
-	// 3. Assign a member function
+	// 3. Assign a lambda
+	// Since we're storing this lambda, we can unassign it later
+	auto l = [](const int a, const float b) { std::cout << "Stored Lambda: " << a << ", " << b << "\n"; };
+	Delegate.Bind(l);
+
+	// 4. Assign a member function
 	Foo foo;
 	Delegate.Bind(&foo, &Foo::PrintNumbers);
 
@@ -79,6 +84,10 @@ void ShowUnassignUsage()
 	Delegate.Unbind(&foo);
 	Delegate.Unbind(&PrintNumbers);
 
+	Delegate.Invoke(5, 10.f);
+
+	// Now, we unbind our previously stored lambda, meaning we'll only be invoking our unstored lambda
+	Delegate.Unbind(l);
 	Delegate.Invoke(5, 10.f);
 }
 
