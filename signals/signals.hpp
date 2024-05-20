@@ -36,7 +36,7 @@ public:
 
 	void Unbind(void(*Function)(Ts...))
 	{
-		std::erase_if(Callbacks, [Function](const CallbackInfo& cInfo)->bool
+		std::erase_if(Callbacks, [Function, this](const CallbackInfo& cInfo)->bool
 			{
 				return GetFunctionAddress(cInfo.Callback) == reinterpret_cast<uint64_t>(Function);
 			});
@@ -73,12 +73,18 @@ private:
 		}
 	}
 
-	uint64_t GetFunctionAddress(const std::function<void(Ts...)>& function) const
+	// 'function' cannot be passed as 'const' since it won't compile anymore
+	uint64_t GetFunctionAddress(std::function<void(Ts...)> InFunc) const
 	{
-		typedef void(FunctionType)(Ts...);
-		FunctionType* const* functionPointer{ function.template target<FunctionType*>() };
+		typedef void FunctionType(Ts...);
+		FunctionType** FuncPtr = InFunc.template target<FunctionType*>();
 
-		return reinterpret_cast<uint64_t>(functionPointer);
+		if (FuncPtr)
+		{
+			return reinterpret_cast<uint64_t>(*FuncPtr);
+		}
+
+		return 0; // error code
 	}
 
 	std::vector<CallbackInfo> Callbacks;

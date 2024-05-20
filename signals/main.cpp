@@ -77,6 +77,7 @@ void ShowUnassignUsage()
 	// Now, we unbind our member function which will ensure it is not called when 'Invoke()' is called
 	// It is currently not possible to unbind specific member functions from 
 	Delegate.Unbind(&foo);
+	Delegate.Unbind(&PrintNumbers);
 
 	Delegate.Invoke(5, 10.f);
 }
@@ -87,4 +88,5 @@ int main()
 	std::cout << "\n==============================\n";
 
 	ShowUnassignUsage();
+	std::cout << "\n==============================\n";
 }
