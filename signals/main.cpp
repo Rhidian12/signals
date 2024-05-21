@@ -1,4 +1,5 @@
 #include "signals.hpp"
+#include "asyncsignals.hpp"
 
 #include <iostream>
 
@@ -98,4 +99,6 @@ int main()
 
 	ShowUnassignUsage();
 	std::cout << "\n==============================\n";
+
+	AsyncDelegate<int> a;
 }

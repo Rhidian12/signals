@@ -131,6 +131,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="asyncsignals.hpp" />
     <ClInclude Include="signals.hpp" />
   </ItemGroup>
   <ItemGroup>
